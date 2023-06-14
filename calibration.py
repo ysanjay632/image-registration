@@ -1,15 +1,15 @@
+# this method is purely well tested program 
+
 import sunpy.map
 import glob
 import numpy as np
-import aiapy.data.sample as sample_data
-from aiapy.calibrate import normalize_exposure,register
+from aiapy.calibrate import register
 from sunpy.io  import write_file
 import sunkit_image.coalignment as c
 import astropy.units as u
-import sunpy.visualization.animator as ani
 import matplotlib.pyplot as plt
 from sunpy.image import resample
-filelist= glob.glob("C:/Users/ysanj/sunpy/data/1700/*.fits")
+filelist= glob.glob("file_path/*.fits")
 
 map= [sunpy.map.Map(f) for f in filelist]
 maps = [[] for _ in range(len(map))]
@@ -32,10 +32,8 @@ for i in range(len(map)):
     maps[i] = sunpy.map.Map(sm, smap[i].meta)
     print(i)
 
-mapss = sunpy.map.MapSequence(maps)
 data = [[] for _ in range(len(maps))]
 data2 = [[] for _ in range(len(maps))]
-corr_array = [[] for _ in range(len(maps))]
 yshift=[[] for _ in range(len(maps))]
 xshift =[[] for _ in range(len(maps))]
 y=[[] for _ in range(len(maps))]
@@ -45,9 +43,8 @@ sx =[[] for _ in range(len(maps))]
 
 for i in range(len(maps)):
     data[i] = ((maps[i].data))
-    #mask = np.isnan(data[i])
-    #data[i][mask] = 0
-temp = data[0][2200:3000,2000:3000]
+    
+temp = data[0][2200:3000,2000:3000]   # can be chosen different
 print(np.max(temp))
 for i in range(len(maps)):
     shift = c.calculate_shift(data[i],temp)
@@ -70,10 +67,10 @@ for i in range(len(aligned)):
     print(aligned[i].data.shape)
     print(maps[i].data.shape)
 for i in range(len(maps)):
-    print(data[i][1485][1504],aligned[i].data[1485][1504])
+    
     t = aligned[i].meta['DATE-OBS']
     t = t.replace(':', '_')
-    file = f'AIA_1600_{t}.fits'
+    file = f'AIA_1600_{t}.fits'        # can be chosen different
 
     write_file(file, aligned[i].data, aligned[i].meta, filetype= 'fits')
 
