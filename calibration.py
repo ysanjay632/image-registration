@@ -76,4 +76,4 @@ def align_and_register(file_path):
         file = f'AIA_1700_{t}.fits'
 
         write_file(file, aligned[i].data, aligned[i].meta, filetype= 'fits')
-align_and_register('C:/Users/ysanj/sunpy/data/1700')
+align_and_register(file_path)
